@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 const links = [
   { title: "Overview", link: "/" },
@@ -9,12 +10,17 @@ const links = [
 ];
 
 export default function Navigation() {
+  const location = useLocation();
+
   return (
     <div className="flex flex-col">
       {links.map((link) => {
         return (
           <a
-            className="px-4 py-3 border-b border-neutral-800 text-neutral-400 hover:text-white"
+            className={
+              "px-4 py-3 border-b border-neutral-800 text-neutral-400 hover:text-white " +
+              (location.pathname == link.link ? "text-white" : "")
+            }
             href={link.link}
           >
             {link.title}
