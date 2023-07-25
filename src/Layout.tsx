@@ -73,7 +73,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <Navigation />
         </div>
         <div className="bg-neutral-800 flex-1 relative">
-          <div className="grid grid-cols-2 lg:grid-cols-4 max-w-[1400px] gap-2 m-2">
+          <div className="grid grid-cols-2 lg:grid-cols-4 max-w-[1400px] gap-4 m-4">
             {children}
           </div>
 
