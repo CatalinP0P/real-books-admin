@@ -15,11 +15,15 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const doc = document.getElementById("root");
     if (mobileNav) {
-      doc?.classList.add("lg:h-screen");
-      doc?.classList.add("lg:overflow-hidden");
+      doc?.classList.add("h-screen");
+      doc?.classList.add("lg:h-fit");
+      doc?.classList.add("overflow-hidden");
+      doc?.classList.add("lg:overflow-auto");
     } else {
-      doc?.classList.remove("lg:h-screen");
-      doc?.classList.remove("lg:overflow-hidden");
+      doc?.classList.remove("h-screen");
+      doc?.classList.remove("lg:h-fit");
+      doc?.classList.remove("overflow-hidden");
+      doc?.classList.remove("lg:overflow-auto");
     }
   }, [mobileNav]);
 
