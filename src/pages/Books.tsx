@@ -3,12 +3,17 @@ import React, {
   ChangeEventHandler,
   FormEvent,
   FormEventHandler,
+  useRef,
   useState,
 } from "react";
 import AutoStoriesIcon from "@mui/icons-material/AutoStories";
 import AddIcon from "@mui/icons-material/Add";
 import Card from "../components/ui/Card";
 import Input from "../components/ui/forms/Input";
+import BookImage from "../components/ui/BookImage";
+import Button from "../components/ui/Button";
+import Select from "../components/ui/forms/Select";
+import TextArea from "../components/ui/forms/TextArea";
 
 interface NewBookProps {
   imageURL: string;
@@ -20,13 +25,14 @@ interface NewBookProps {
 }
 
 export default function Books() {
+  const fileInputRef = useRef(null);
   const [newBookData, setNewBookData] = useState<NewBookProps>({
     imageURL: "",
     title: "",
     author: "",
     genre: "",
     description: "",
-    pages: 100,
+    pages: 0,
   });
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = (
@@ -34,6 +40,17 @@ export default function Books() {
   ) => {
     e.preventDefault();
     console.log(newBookData);
+
+    const form: any = e.target;
+    form.reset();
+    setNewBookData({
+      imageURL: "",
+      title: "",
+      author: "",
+      genre: "",
+      description: "",
+      pages: 0,
+    });
   };
 
   const handleFileChange: ChangeEventHandler<HTMLInputElement> = (
@@ -44,15 +61,16 @@ export default function Books() {
     const fileReader = new FileReader();
 
     fileReader.onload = () => {
+      console.log(fileReader.result);
       setNewBookData({ ...newBookData, imageURL: fileReader.result as string });
     };
 
     fileReader.readAsDataURL(file);
   };
 
-  const handleChange: ChangeEventHandler<HTMLInputElement> = (
-    e: ChangeEvent<any>
-  ) => {
+  const handleChange: ChangeEventHandler<
+    HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+  > = (e: ChangeEvent<any>) => {
     const { name, value } = e.target;
 
     setNewBookData({ ...newBookData, [name]: value });
@@ -112,8 +130,73 @@ export default function Books() {
         icon={<AddIcon fontSize="large" />}
         title="Add a book"
       >
-        <form onSubmit={handleSubmit}>
-          <Input title="Title" placeholder="Book title" />
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          {newBookData.imageURL && (
+            <BookImage imageURL={newBookData.imageURL} />
+          )}
+          <input
+            className="hidden"
+            ref={fileInputRef}
+            onChange={handleFileChange}
+            type="file"
+            accept="image"
+          />
+          <Button
+            variant="secondary"
+            className="w-full"
+            rounded={false}
+            type="button"
+            onClick={() => {
+              const input: any = fileInputRef.current;
+              input?.click();
+            }}
+          >
+            Upload Image
+          </Button>
+
+          <Input
+            title="Title"
+            placeholder="Book title"
+            name="title"
+            onChange={handleChange}
+          />
+          <div className="grid grid-cols-2 gap-2">
+            <Input
+              name="price"
+              onChange={handleChange}
+              placeholder="Book price"
+              title="Price"
+            />
+            <Input
+              name="pages"
+              onChange={handleChange}
+              placeholder="Book pages"
+              title="Pages"
+            />
+          </div>
+
+          <Select
+            title="Genre"
+            name="genre"
+            onChange={handleChange}
+            options={["Choose a genere", "Drama", "Action", "Self Development"]}
+          />
+
+          <Select
+            title="Author"
+            name="author"
+            onChange={handleChange}
+            options={["Choose an author", "Popa Liviu", "Ion Creanga"]}
+          />
+
+          <TextArea
+            title="Description"
+            name="description"
+            onChange={handleChange}
+          />
+          <Button variant="primary" rounded={false} className="w-full">
+            Add Book
+          </Button>
         </form>
       </Card>
     </>

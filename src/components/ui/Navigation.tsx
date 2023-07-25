@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 const links = [
   { title: "Overview", link: "/" },
   { title: "Books", link: "/books" },
-  { title: "Categories", link: "/categories" },
+  { title: "Genres", link: "/genres" },
   { title: "Authors", link: "/authors" },
   { title: "Blacklist", link: "/blacklist" },
 ];
