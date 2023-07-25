@@ -12,6 +12,21 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const [mobileNav, setMobileNav] = useState(false);
   const [user, loading] = useAuthState(getAuth(firebase.auth().app));
 
+  useEffect(() => {
+    const doc = document.getElementById("root");
+    if (mobileNav) {
+      doc?.classList.add("h-screen");
+      doc?.classList.add("lg:h-fit");
+      doc?.classList.add("overflow-hidden");
+      doc?.classList.add("lg:overflow-auto");
+    } else {
+      doc?.classList.remove("h-screen");
+      doc?.classList.remove("lg:h-fit");
+      doc?.classList.remove("overflow-hidden");
+      doc?.classList.remove("lg:overflow-auto");
+    }
+  }, [mobileNav]);
+
   const signWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
     try {
