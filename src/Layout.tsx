@@ -67,13 +67,16 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               : " translate-x-[-100%] pointer-events-none")
           }
         >
-          <Navigation />
+          <Navigation closePopup={() => setMobileNav(false)} />
         </div>
         <div className="hidden lg:flex flex-col min-w-[200px] bg-neutral-900">
           <Navigation />
         </div>
         <div className="bg-neutral-800 flex-1 relative">
-          {children}
+          <div className="grid grid-cols-2 lg:grid-cols-4 max-w-[1400px] gap-2 m-2">
+            {children}
+          </div>
+
           <div
             className={
               "absolute lg:hidden left-0 top-0 bottom-0 right-0 bg-[rgba(0,0,0,.5)] z-[1] " +
