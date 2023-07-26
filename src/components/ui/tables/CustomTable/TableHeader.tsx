@@ -25,10 +25,16 @@ export default function TableHeader(props: any) {
                 direction={sortingField == col.title ? sortingDirection : "asc"}
                 onClick={(e) => handleSortClick(e, col.title)}
               >
-                <label className=" first-letter:uppercase">{col.title}</label>
+                <label className="first-letter:uppercase">{col.title}</label>
               </TableSortLabel>
             ) : (
-              <label className="first-letter:uppercase">{col.title}</label>
+              <label
+                className="first-letter:uppercase"
+                style={{ color: "white", opacity: 0.6 }}
+              >
+                {col.title[0].toUpperCase()}
+                {col.title.slice(1, col.title.length)}
+              </label>
             )}
           </TableCell>
         ))}
