@@ -7,6 +7,8 @@ import firebase from "./lib/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { getAuth } from "firebase/auth";
 import { GoogleAuthProvider } from "firebase/auth";
+import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
+import { ClearRounded } from "@mui/icons-material";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const [mobileNav, setMobileNav] = useState(false);
@@ -60,13 +62,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <div className="min-h-screen flex flex-col w-full flex-1 text-white">
       <div className="flex flex-row items-center bg-neutral-900 border-b border-neutral-800 py-4 px-8 justify-between gap-4">
         <div className="flex flex-row gap-4 items-center">
-          <MenuSVG
-            onClick={() => setMobileNav(!mobileNav)}
-            className={
-              "h-[24px] w-[24px] lg:hidden select-none transition-all " +
-              (mobileNav ? " rotate-90" : " rotate-0")
-            }
-          />
+          <div onClick={() => setMobileNav(!mobileNav)} className="lg:hidden">
+            {!mobileNav ? (
+              <MenuRoundedIcon fontSize="large" />
+            ) : (
+              <ClearRounded fontSize="large" />
+            )}
+          </div>
           <img className="h-[32px] select-none" src={logoDark} />
         </div>
         <label className="text-xs">
@@ -88,7 +90,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <Navigation />
         </div>
         <div className="bg-neutral-800 flex-1 relative">
-          <div className="grid grid-cols-2 lg:grid-cols-4 max-w-[1400px] gap-4 m-4">
+          <div className="grid grid-cols-2 xl:grid-cols-4 max-w-[1400px] gap-4 m-4">
             {children}
           </div>
 
