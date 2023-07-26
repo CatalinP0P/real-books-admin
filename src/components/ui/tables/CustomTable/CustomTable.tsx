@@ -8,15 +8,23 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import TableHeader from "./TableHeader";
-import { isContinueStatement } from "typescript";
 
-export default function GenreTable() {
-  const [rows, setRows] = useState([
-    { id: 1, genre: "Self Development", sales: 130, rentals: 451 },
-    { id: 2, genre: "Action", sales: 97, rentals: 224 },
-    { id: 3, genre: "Drama", sales: 81, rentals: 182 },
-  ]);
+export interface TableColProps {
+  title: string;
+  sortable: boolean;
+}
 
+interface CustomTableProps {
+  rows: any[];
+  cols: TableColProps[];
+  removeRow?: any;
+}
+
+export default function CustomTable({
+  rows,
+  cols,
+  removeRow,
+}: CustomTableProps) {
   const [pageSize, setPageSize] = useState(2);
   const [page, setPage] = useState(0);
   const [sortingField, setSortingField] = useState("id");
@@ -38,36 +46,18 @@ export default function GenreTable() {
     setPage(page);
   };
 
-  const removeRow = (id: number) => {
-    // eslint-disable-next-line no-restricted-globals
-    if (confirm("Sure?")) {
-      // await fetch("server_url", {
-      //   method: "DELETE",
-      // });
-      setRows(rows.filter((m: any) => m.id == id));
-    }
-  };
-
   const sortRows = () => {
     const array = rows;
     for (var i = 0; i < rows.length; i++) {
       for (var j = i + 1; j < rows.length; j++) {
-        const variableName =
-          sortingField == "id"
-            ? "id"
-            : sortingField == "genre"
-            ? "genre"
-            : sortingField == "sales"
-            ? "sales"
-            : "rentals";
         if (sortingDirection == "asc") {
-          if (array[i][variableName] > array[j][variableName]) {
+          if (array[i][sortingField] > array[j][sortingField]) {
             const aux = array[i];
             array[i] = array[j];
             array[j] = aux;
           }
         } else {
-          if (array[i][variableName] < array[j][variableName]) {
+          if (array[i][sortingField] < array[j][sortingField]) {
             const aux = array[i];
             array[i] = array[j];
             array[j] = aux;
@@ -82,6 +72,8 @@ export default function GenreTable() {
     <TableContainer>
       <Table>
         <TableHeader
+          cols={cols}
+          removeRow={removeRow ? true : false}
           handleSortClick={handleSortClick}
           handlePageSizeChange={handlePageSizeChange}
           sortingField={sortingField}
@@ -92,30 +84,34 @@ export default function GenreTable() {
           .map((row) => {
             return (
               <TableRow>
-                <TableCell>{row.id}</TableCell>
-                <TableCell>{row.genre}</TableCell>
-                <TableCell>{row.sales}</TableCell>
-                <TableCell>{row.rentals}</TableCell>
-                <TableCell>
-                  <a
-                    onClick={() => removeRow(row.id)}
-                    className="text-blue-400"
-                  >
-                    Remove Genre
-                  </a>
-                </TableCell>
+                {cols.map((col) => {
+                  return <TableCell>{row[col.title]}</TableCell>;
+                })}
+                {removeRow && (
+                  <TableCell>
+                    <button
+                      onClick={() => removeRow(row.id)}
+                      className="text-blue-400"
+                    >
+                      Remove
+                    </button>
+                  </TableCell>
+                )}
               </TableRow>
             );
           })}
       </Table>
-      <TablePagination
-        count={rows.length}
-        onPageChange={handlePageChange}
-        onRowsPerPageChange={handlePageSizeChange}
-        page={page}
-        rowsPerPage={pageSize}
-        rowsPerPageOptions={[2, 5, 10, 15]}
-      />
+      <div className="w-full flex flex-row justify-end">
+        <TablePagination
+          style={{ color: "white", minWidth: "100%" }}
+          count={rows.length}
+          onPageChange={handlePageChange}
+          onRowsPerPageChange={handlePageSizeChange}
+          page={page}
+          rowsPerPage={pageSize}
+          rowsPerPageOptions={[2, 5, 10, 15]}
+        />
+      </div>
     </TableContainer>
   );
 }

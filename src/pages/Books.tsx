@@ -14,6 +14,10 @@ import BookImage from "../components/ui/BookImage";
 import Button from "../components/ui/Button";
 import Select from "../components/ui/forms/Select";
 import TextArea from "../components/ui/forms/TextArea";
+import CustomTable, {
+  TableColProps,
+} from "../components/ui/tables/CustomTable/CustomTable";
+import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 
 interface NewBookProps {
   imageURL: string;
@@ -76,14 +80,88 @@ export default function Books() {
     setNewBookData({ ...newBookData, [name]: value });
   };
 
+  const cols: TableColProps[] = [
+    {
+      title: "id",
+      sortable: true,
+    },
+    {
+      title: "title",
+      sortable: true,
+    },
+    {
+      title: "author",
+      sortable: true,
+    },
+    {
+      title: "genre",
+      sortable: true,
+    },
+    {
+      title: "pages",
+      sortable: true,
+    },
+    {
+      title: "price",
+      sortable: true,
+    },
+    {
+      title: "sales",
+      sortable: true,
+    },
+    {
+      title: "rentals",
+      sortable: true,
+    },
+  ];
+
+  const [rows, setRows] = useState([
+    {
+      id: 1,
+      title: "Atomic Habits",
+      author: "James Clear",
+      genre: "Self Development",
+      pages: 310,
+      price: 120,
+      sales: 120,
+      rentals: 412,
+    },
+    {
+      id: 2,
+      title: "Cant Hurt Me",
+      author: "David Goggings",
+      genre: "Self Development",
+      pages: 310,
+      price: 220,
+      sales: 90,
+      rentals: 312,
+    },
+    {
+      id: 3,
+      title: "Amintiri din Copilarie",
+      author: "Ion Creanga",
+      genre: "Action",
+      pages: 411,
+      price: 60,
+      sales: 40,
+      rentals: 97,
+    },
+  ]);
+
+  const removeRow = (id: number) => {
+    if (window.confirm("Sure?")) setRows(rows.filter((m) => m.id != id));
+  };
+
   return (
     <>
       <Card icon={<AutoStoriesIcon fontSize="large" />} title={"Books"}>
-        <label className="text-4xl font-bold text-neutral-400">131</label>
+        <label className="text-4xl font-bold text-neutral-400">
+          {rows.length}
+        </label>
       </Card>
       <Card
         className="col-span-full"
-        icon={<AutoStoriesIcon fontSize="large" />}
+        icon={<TrendingUpIcon fontSize="large" />}
         title="Best Sellers"
       >
         <div className="flex flex-row gap-4 w-full overflow-x-auto">
@@ -123,6 +201,14 @@ export default function Books() {
             </div>
           </div>
         </div>
+      </Card>
+
+      <Card
+        title="All Books"
+        className="col-span-full"
+        icon={<AutoStoriesIcon fontSize="large" />}
+      >
+        <CustomTable rows={rows} cols={cols} removeRow={removeRow} />
       </Card>
 
       <Card

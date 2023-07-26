@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Card from "../components/ui/Card";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import ClearRoundedIcon from "@mui/icons-material/ClearRounded";
@@ -16,20 +16,37 @@ import {
   TableRow,
   TableSortLabel,
 } from "@mui/material";
-import GenreTable from "../components/ui/tables/GenreTable/GenreTable";
+import CustomTable from "../components/ui/tables/CustomTable/CustomTable";
 
 export default function Genres() {
-  const columns: GridColDef[] = [
-    { field: "id", headerName: "ID", width: 70 },
-    { field: "genre", headerName: "Genre", width: 130 },
-    { field: "sales", headerName: "Sales this month", width: 150 },
+  const [rows, setRows] = useState([
+    { id: 1, genre: "Drama", sales: 131, rentals: 413 },
+    { id: 2, genre: "Action", sales: 213, rentals: 242 },
+    { id: 3, genre: "Self Development", sales: 325, rentals: 161 },
+  ]);
+
+  const cols = [
+    {
+      title: "id",
+      sortable: true,
+    },
+    {
+      title: "genre",
+      sortable: true,
+    },
+    {
+      title: "sales",
+      sortable: true,
+    },
+    {
+      title: "rentals",
+      sortable: true,
+    },
   ];
 
-  const rows = [
-    { id: 1, genre: "Drama", sales: 131 },
-    { id: 2, genre: "Action", sales: 213 },
-    { id: 3, genre: "Self Development", sales: 325 },
-  ];
+  const removeRow = (id: number) => {
+    if (window.confirm("Sure?")) setRows(rows.filter((m) => m.id != id));
+  };
 
   const createSortHandler = (value: string) => {
     console.log(value);
@@ -80,7 +97,7 @@ export default function Genres() {
           </div>
         </div>
         <div className="flex flex-col gap-0 w-full bg-neutral-600 text-neutral-200">
-          <GenreTable />
+          <CustomTable cols={cols} rows={rows} removeRow={removeRow} />
         </div>
       </Card>
     </>
